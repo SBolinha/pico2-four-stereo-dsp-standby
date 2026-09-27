@@ -1,0 +1,80 @@
+;
+; Continuous-clock, buffered PCM1808 -> DSP -> 4 x PCM5102 engine.
+;
+; PIO1 runs the clock generator, MCLK and ADC receiver. None of these
+; programs depends on a TX audio FIFO, so MCLK/BCK/LRCK never stop.
+; PIO0 runs four instances of the same DAC-data follower program.
+;
+
+.program audio_i2s_clock_32
+.side_set 1
+.wrap_target
+clock_left_loop:
+    nop                         side 0
+    nop                         side 0
+    nop                         side 1
+    jmp x-- clock_left_loop     side 1
+    set pins, 1                 side 0
+    nop                         side 0
+    nop                         side 1
+    set x, 30                   side 1
+clock_right_loop:
+    nop                         side 0
+    nop                         side 0
+    nop                         side 1
+    jmp x-- clock_right_loop    side 1
+    set pins, 0                 side 0
+    nop                         side 0
+    nop                         side 1
+public entry_point:
+    set x, 30                   side 1
+.wrap
+
+.program pcm1808_mclk_256
+.side_set 1
+.wrap_target
+    nop                         side 1
+    nop                         side 0
+.wrap
+
+.program pcm1808_i2s_rx_32
+public entry_point:
+    wait 1 gpio 10
+    wait 0 gpio 10
+    wait 1 gpio 12
+    set x, 31
+.wrap_target
+rx_left_loop:
+    wait 0 gpio 12
+    wait 1 gpio 12
+    in pins, 1
+    jmp x-- rx_left_loop
+    set x, 31
+rx_right_loop:
+    wait 0 gpio 12
+    wait 1 gpio 12
+    in pins, 1
+    jmp x-- rx_right_loop
+    set x, 31
+.wrap
+
+.program pcm5102_i2s_tx_32
+public entry_point:
+    wait 1 gpio 10
+    wait 0 gpio 10
+    wait 1 gpio 12
+    set x, 31
+.wrap_target
+tx_left_loop:
+    wait 0 gpio 12
+    out pins, 1
+    wait 1 gpio 12
+    jmp x-- tx_left_loop
+    set x, 31
+tx_right_loop:
+    wait 0 gpio 12
+    out pins, 1
+    wait 1 gpio 12
+    jmp x-- tx_right_loop
+    set x, 31
+.wrap

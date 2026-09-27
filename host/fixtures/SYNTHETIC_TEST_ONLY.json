@@ -1,0 +1,35 @@
+{
+  "name": "SYNTHETIC_TEST_ONLY",
+  "sample_rate": 96000,
+  "block_size": 64,
+  "approved_for_hardware": true,
+  "input_headroom_db": -9.0,
+  "max_delay_samples": 100,
+  "bands": [
+    {
+      "id": "LOW", "gain_db": 0, "polarity": 1, "delay_samples": 3,
+      "filters": [
+        {"type":"COEFF","b0":0.82,"b1":0.04,"b2":0.01,"a1":-0.22,"a2":0.03},
+        {"type":"COEFF","b0":0.91,"b1":0.03,"b2":0.0,"a1":-0.1,"a2":0.02}
+      ]
+    },
+    {
+      "id": "LOW_MID", "gain_db": -2, "polarity": -1, "delay_samples": 7,
+      "filters": [
+        {"type":"COEFF","b0":0.75,"b1":-0.12,"b2":0.04,"a1":-0.28,"a2":0.06}
+      ]
+    },
+    {
+      "id": "HIGH_MID", "gain_db": 1, "polarity": 1, "delay_samples": 0,
+      "filters": [
+        {"type":"COEFF","b0":0.96,"b1":0.05,"b2":0.01,"a1":-0.15,"a2":0.04}
+      ]
+    },
+    {
+      "id": "HIGH", "gain_db": -3, "polarity": 1, "delay_samples": 2,
+      "filters": [
+        {"type":"COEFF","b0":0.87,"b1":0.07,"b2":0.03,"a1":-0.18,"a2":0.02}
+      ]
+    }
+  ]
+}

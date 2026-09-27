@@ -1,0 +1,12 @@
+build*/
+*.uf2
+*.elf
+*.bin
+*.hex
+*.map
+*.pyc
+__pycache__/
+.DS_Store
+# Do not place private filter JSON files inside the repository.
+config/*.json
+!config/example_filters_96k.json
