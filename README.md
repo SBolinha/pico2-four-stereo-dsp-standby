@@ -38,8 +38,11 @@ its Wi-Fi radio is unused. USB BOOTSEL firmware flashing still works.
 Share ground and the two I²S clock signals across the converter modules.
 The PIO source waits on GPIO 10 and 12 directly; changing clock pins
 requires updating both `src/main.cpp` and `src/audio_transport.pio`.
-See [hardware and validation](docs/hardware_and_validation.md) for a staged
-scope and listening check.
+See [hardware photographs, capacitor modification and full wiring](docs/hardware_and_validation.md)
+for the pictured boards and a staged scope and listening check. The ADC
+module pictured there required removal of two specific SMD input capacitors
+to achieve its measured flat response; test another module before making
+that board-specific modification.
 
 ## Build
 
@@ -91,9 +94,13 @@ The firmware accepts `COEFF` entries only, each with `b0`, `b1`, `b2`,
 `a1`, `a2`; two entries in series form each LR4 low-pass or high-pass.
 Band IDs must be `LOW`, `LOW_MID`, `HIGH_MID`, `HIGH` in DAC pin order.
 Each band also has `gain_db`, `polarity` and `delay_samples` settings.
-See [filter format and coefficient convention](docs/filter_format.md)
-for a complete schema and the difference between JSON `block_size`
-metadata and the fixed 512-frame DMA buffer.
+Use the [standalone one-cell Jupyter notebook](notebooks/generic_filter_workflow_one_cell.ipynb)
+to edit a frequency/Q/gain recipe, generate transfer-function graphs and
+export 96 kHz `COEFF` JSON for the `DSP_FILTER_JSON` build variable. See
+[filter design, supported types, conversion and coefficient convention](docs/filter_format.md)
+for the full manual and the difference between JSON `block_size` metadata
+and the fixed 512-frame DMA buffer. The notebook has no project Python
+dependencies but requires NumPy, SciPy and Matplotlib in Jupyter.
 
 ## Five-minute standby
 
@@ -129,7 +136,10 @@ filter bank: clean audio on all four stereo outputs, and standby after
 approximately five minutes of silence with two different receiver inputs.
 This renamed, public example bank has native checks and a CI build recipe;
 it **has not yet been checked on that hardware**. Scope measurements are
-still needed to validate its example transfer functions and wiring.
+still needed to validate its example transfer functions and wiring. The
+[test history](docs/test_history.md) identifies the ADC response, earlier
+transport trials, eight-channel listening, two timed standby checks, and
+remaining validation separately.
 
 ## License
 

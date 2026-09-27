@@ -64,7 +64,7 @@ def compile_config(cfg, allow_test_fixture=False):
     if not isinstance(bands, list) or len(bands) != 4 or [
             band.get("id") if isinstance(band, dict) else None for band in bands
             ] != ["LOW", "LOW_MID", "HIGH_MID", "HIGH"]:
-        raise ValueError("Expected exactly four bands, ordered W, LM, UM, T")
+        raise ValueError("Expected exactly four bands, ordered LOW, LOW_MID, HIGH_MID, HIGH")
 
     tables = []
     longest = 0
